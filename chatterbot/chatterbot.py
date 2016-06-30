@@ -126,7 +126,7 @@ class ChatBot(object):
             return previous_interaction[0]
         return None
 
-    def get_response(self, input_item):
+    def get_response_with_confidence(self, input_item):
         """
         Return the bot's response based on the input.
         """
@@ -153,8 +153,13 @@ class ChatBot(object):
         )
 
         # Process the response output with the output adapter
-        return self.output.process_response(response)
+        return confidence, self.output.process_response(response)
 
+    def get_response(self, input_item):
+        confidence, response = self.get_response_with_confidence(input_item)
+        return response
+        
+    
     def set_trainer(self, training_class, **kwargs):
         """
         Set the module used to train the chatbot.
